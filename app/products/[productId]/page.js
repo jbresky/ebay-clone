@@ -1,5 +1,6 @@
 'use client'
 
+import SimilarProducts from "@/app/components/SimilarProducts";
 import MainLayout from "@/app/layouts/MainLayout";
 
 const product = {
@@ -66,6 +67,8 @@ const Product = ({ params }) => {
                         </div>
                     </div>
                 </div>
+
+                <SimilarProducts />
 
             </MainLayout >
         </>
