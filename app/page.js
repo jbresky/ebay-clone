@@ -1,11 +1,12 @@
 'use client'
 
+import CarouselComp from './components/CarouselComp';
 import MainLayout from './layouts/MainLayout'
 
 const Home = () => {
   return ( 
     <MainLayout>
-      Cool
+      <CarouselComp />
     </MainLayout>
    );
 }

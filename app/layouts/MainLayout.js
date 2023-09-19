@@ -13,6 +13,13 @@ const MainLayout = ({ children }) => {
                     <TopMenu />
                     <MainHeader />
                     <SubMenu />
+                </div>
+                
+                <div>
+                    {children}
+                </div>
+
+                <div>
                     <Footer />
                 </div>
             </div>
