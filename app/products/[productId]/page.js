@@ -1,6 +1,7 @@
 'use client'
 
 import SimilarProducts from "@/app/components/SimilarProducts";
+import { useCart } from "@/app/context/cart";
 import MainLayout from "@/app/layouts/MainLayout";
 import { toast } from "react-toastify"
 
