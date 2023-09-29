@@ -1,32 +1,34 @@
-'use client'
+"use client";
 
-import CarouselComp from './components/CarouselComp';
+import { useEffect, useState } from 'react';
+import CarouselComp from './components/CarouselComp'
 import Product from './components/Product';
-import MainLayout from './layouts/MainLayout'
+import MainLayout from './layouts/MainLayout';
+import useIsLoading from "@/app/hooks/useIsLoading"
 
-const products = [
-  {
-    id: 1,
-    title: "Brownnn",
-    description: "yeyeyeye",
-    url: "https://picsum.photos/id/7",
-    price: 2500
-  },
-  {
-    id: 2,
-    title: "Redd",
-    description: "ieieieie",
-    url: "https://picsum.photos/id/3",
-    price: 1500
+export default function Home() {
+
+  const [products, setProducts] = useState([])
+
+  const getProducts = async () => {
+    useIsLoading(true)
+
+    const response = await fetch('/api/products')
+    const prods = await response.json()
+
+    setProducts([])
+    setProducts(prods)
+    useIsLoading(false)
   }
-]
- 
-const Home = () => {
-  return ( 
-    <MainLayout>
-      <CarouselComp />
 
-      <div className="max-w-[1200px] mx-auto">
+  useEffect(() => { getProducts() }, [])
+
+  return (
+    <>
+        <MainLayout>
+          <CarouselComp />
+
+          <div className="max-w-[1200px] mx-auto">
             <div className="text-2xl font-bold mt-4 mb-6 px-4">Products</div>
 
             <div className="grid grid-cols-5 gap-4">
@@ -35,9 +37,7 @@ const Home = () => {
               ))}
             </div>
           </div>
-
-    </MainLayout>
-   );
+        </MainLayout>
+    </>
+  )
 }
- 
-export default Home;

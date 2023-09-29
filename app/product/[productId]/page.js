@@ -1,24 +1,37 @@
-'use client'
+"use client"
 
-import SimilarProducts from "@/app/components/SimilarProducts";
-import { useCart } from "@/app/context/cart";
-import MainLayout from "@/app/layouts/MainLayout";
+import MainLayout from "../../layouts/MainLayout"
+import SimilarProducts from "../../components/SimilarProducts"
+import { useEffect, useState } from "react"
+import useIsLoading from "../../hooks/useIsLoading"
+import { useCart } from "../../context/cart"
 import { toast } from "react-toastify"
 
-const product = {
-    id: 1,
-    title: "Brownnn",
-    description: "yeyeyeye",
-    url: "https://picsum.photos/id/7",
-    price: 2500
-}
-
-const Product = ({ params }) => {
-
+export default function Product({ params }) {
     const cart = useCart()
+
+    const [product, setProduct] = useState({})
+
+    const getProduct = async () => {
+        useIsLoading(true)
+        setProduct({})
+
+        const response = await fetch(`/api/product/${params.id}`)
+        const prod = await response.json()
+        setProduct(prod)
+        cart.isItemAddedToCart(prod)
+        useIsLoading(false)
+
+    }
+
+    useEffect(() => {
+        getProduct()
+    }, [])
+
     return (
         <>
             <MainLayout>
+
                 <div className="max-w-[1200px] mx-auto">
                     <div className="flex px-4 py-10">
 
@@ -52,21 +65,21 @@ const Product = ({ params }) => {
                                             : null}
                                     </div>
                                     <button
-                                          onClick={() => {
+                                        onClick={() => {
                                             if (cart.isItemAdded) {
-                                              cart.removeFromCart(product)
-                                              toast.info('Removed from cart', { autoClose: 3000 })
+                                                cart.removeFromCart(product)
+                                                toast.info('Removed from cart', { autoClose: 3000 })
                                             } else {
-                                              cart.addToCart(product)
-                                              toast.success('Added to cart', { autoClose: 3000 })
+                                                cart.addToCart(product)
+                                                toast.success('Added to cart', { autoClose: 3000 })
                                             }
-                                          }} 
-                                        className={`bg-[#3498C9]
-                                            text-white py-2 px-20 rounded-full cursor-pointer
-                                            ${cart.isItemAdded ? 'bg-[#e9a321] hover:bg-[#bf851a]' : 'bg-[#3498C9] hover:bg-[#0054A0]'}
-                                            `}
+                                        }}
+                                        className={`
+                      text-white py-2 px-20 rounded-full cursor-pointer 
+                      ${cart.isItemAdded ? 'bg-[#e9a321] hover:bg-[#bf851a]' : 'bg-[#3498C9] hover:bg-[#0054A0]'}
+                    `}
                                     >
-                                            {cart.isItemAdded ? 'Remove From Cart' : 'Add To Cart'}
+                                        {cart.isItemAdded ? 'Remove From Cart' : 'Add To Cart'}
                                     </button>
                                 </div>
                             </div>
@@ -84,9 +97,7 @@ const Product = ({ params }) => {
 
                 <SimilarProducts />
 
-            </MainLayout >
+            </MainLayout>
         </>
-    );
+    )
 }
-
-export default Product;
