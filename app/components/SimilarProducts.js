@@ -1,30 +1,35 @@
 'use client'
 
+import { useEffect, useState } from "react"
+import ProductComp from "./Product"
 import { BiLoader } from 'react-icons/bi'
-import Product from './Product';
 
-const SimilarProducts = ({ product }) => {
+export default function SimilarProducts () {
 
-    const products = [
-        {
-          id: 1,
-          title: "Brownnn",
-          description: "yeyeyeye",
-          url: "https://picsum.photos/id/7",
-          price: 2500
-        },
-        {
-          id: 2,
-          title: "Redd",
-          description: "ieieieie",
-          url: "https://picsum.photos/id/3",
-          price: 1500
-        }
-      ]
+  const [products, setProducts] = useState([])
 
-    return (
-        <>
-            <div>
+  const getRandomProducts = async () => {
+    try {
+      const response = await fetch('/api/products/get-random')
+      const result = await response.json()
+
+      if (result) {
+        setProducts(result)
+        return
+      }
+
+      setProducts([])
+    } catch (error) {
+      console.log(error)
+      alert(error)
+    }
+  }
+
+  useEffect(() => { getRandomProducts() }, [])
+
+  return ( 
+    <>
+        <div>
             <div className="border-b py-1 max-w-[1200px] mx-auto" />
 
             <div className="max-w-[1200px] mx-auto">
@@ -33,7 +38,7 @@ const SimilarProducts = ({ product }) => {
                 {products.length > 0 ?
                   <div className="grid grid-cols-5 gap-4">
                     {products.map(product => (
-                        <Product key={product.id} product={product} />
+                        <ProductComp key={product.id} product={product} />
                     ))}
                   </div>
                 : <div className="flex items-center justify-center">
@@ -44,8 +49,6 @@ const SimilarProducts = ({ product }) => {
                   </div>}
             </div>
         </div>
-        </>
-    );
-}
-
-export default SimilarProducts;
+    </>
+  );
+};
